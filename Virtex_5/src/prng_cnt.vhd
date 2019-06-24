@@ -28,10 +28,9 @@ entity prng_cnt is
         mode  : in  std_logic;  -- Mode select: '1' for PRNG, '0' for 8-bit counter
         reset : in  std_logic;  -- Reset signal (To be Asserted for changing mode)
         rng   : out std_logic_vector (31 downto 0) -- Output Generated Data
-
     );
+    
 end prng_cnt;
-
 
 architecture rtl of prng_cnt is
 

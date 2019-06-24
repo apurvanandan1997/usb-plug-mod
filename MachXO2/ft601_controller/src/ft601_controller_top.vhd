@@ -18,7 +18,6 @@
 --
 ----------------------------------------------------------------------------------
 
-
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
@@ -38,7 +37,6 @@ entity ft601_top is
         FT601_SIWU_N : out std_logic;
         FT601_RD_N   : out std_logic;
         FT601_OE_N   : out std_logic
-
     );
 
 end entity ft601_top;

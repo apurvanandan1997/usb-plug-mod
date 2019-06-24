@@ -43,7 +43,7 @@ begin
     ----------------------------------------------------------------------------
     -- count_proc: 32-bit counter process for data generation
     ----------------------------------------------------------------------------
-    count_proc: process(clk)
+    count_proc : process(clk)
     begin
         if rising_edge(clk) then
             if rst = '1' then

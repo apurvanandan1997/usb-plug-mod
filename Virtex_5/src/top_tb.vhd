@@ -28,17 +28,12 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
--- uncomment the following library declaration if using
--- arithmetic functions with signed or unsigned values
---use ieee.numeric_std.all;
-
 entity top_tb is
 end top_tb;
 
 architecture behavior of top_tb is
 
     -- component declaration for the unit under test (uut)
-
     component top
     port(
         USER_CLK      : in  std_logic;
@@ -88,7 +83,6 @@ begin
         wait for USER_CLK_period/2;
     
     end process;
-
 
     -- Stimulus process
     stim_proc : process

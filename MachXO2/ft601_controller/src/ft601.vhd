@@ -52,7 +52,6 @@ entity ft601 is
 
 end entity ft601;
 
-
 architecture rtl of ft601 is
     -- The state for the two FSM made in this design
     constant IDLE    : std_logic_vector(2 downto 0) := "000";
@@ -82,7 +81,6 @@ architecture rtl of ft601 is
     signal i_pre_valid : std_logic_vector(2 downto 0) := "000";
     signal i_data      : std_logic_vector(95 downto 0);
     signal i_pre_data  : std_logic_vector(95 downto 0);
-
 
 begin
 
@@ -183,7 +181,6 @@ begin
                         i_valid(2)  <= i_pre_valid(0);
                         i_wr_en     <= i_pre_valid(0);
                         i_pre_valid <= "0" & i_pre_valid(2 downto 1);
-
                         i_data(95 downto 64)    <= i_pre_data(31 downto 0);
                         i_pre_data(63 downto 0) <= i_pre_data(95 downto 32);
 

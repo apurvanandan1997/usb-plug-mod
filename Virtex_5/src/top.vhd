@@ -22,7 +22,7 @@ library IEEE;
 use IEEE.std_logic_1164.ALL;
 use IEEE.numeric_std.ALL;
 
-Library unisim;
+library unisim;
 use unisim.vcomponents.all;
 
 entity top is
@@ -60,7 +60,6 @@ architecture rtl of top is
     signal shift1_clk : std_logic := '0';
     signal shift2_clk : std_logic := '0';
 
-
 begin
 
     rst <= RESET or not locked;
@@ -86,9 +85,8 @@ begin
                                                         -- "INTERNAL", "EXTERNAL", "DCM2PLL", "PLL2DCM"
             DIVCLK_DIVIDE => 1,                         -- Division factor for all clocks (1 to 52)
             REF_JITTER    => 0.100                      -- Input reference jitter (0.000 to 0.999 UI%)
-
-
         )
+
         port map (
             CLKFBOUT => clkfbout, -- General output feedback signal
             CLKOUT0  => clk_bufg, -- One of six general clock output signals
@@ -117,9 +115,8 @@ begin
             SRVAL_OQ       => '0',      -- Define Q1 output value upon SR assertion - ’1’ or ’0’
             SRVAL_TQ       => '0',      -- Define Q1 output value upon SR assertion - ’1’ or ’0’
             TRISTATE_WIDTH => 1         -- Specify parallel to serial converter width
-            )                           -- When DATA_RATE_TQ = DDR: 2 or 4
+        )                               -- When DATA_RATE_TQ = DDR: 2 or 4
                                         -- When DATA_RATE_TQ = SDR or BUF: 1 "
-
         port map (
             OQ        => ser_data,      -- 1-bit output
             SHIFTOUT1 => open,          -- 1-bit data expansion output
@@ -135,8 +132,8 @@ begin
             D6        => enc10b_dat(5), -- 1-bit parallel data input
             OCE       => '1',           -- 1-bit clock enable input
             REV       => '0',           -- Must be tied to logic zero
-            SHIFTIN1  => shift1_dat,        -- 1-bit data expansion input
-            SHIFTIN2  => shift2_dat,        -- 1-bit data expansion input
+            SHIFTIN1  => shift1_dat,    -- 1-bit data expansion input
+            SHIFTIN2  => shift2_dat,    -- 1-bit data expansion input
             SR        => rst,           -- 1-bit set/reset input
             T1        => '0',           -- 1-bit parallel 3-state input
             T2        => '0',           -- 1-bit parallel 3-state input
@@ -159,11 +156,10 @@ begin
             TRISTATE_WIDTH => 1        -- Specify parallel to serial converter width
         )                              -- When DATA_RATE_TQ = DDR: 2 or 4
                                        -- When DATA_RATE_TQ = SDR or BUF: 1 "
-
         port map (
             OQ        => open,          -- 1-bit output
-            SHIFTOUT1 => shift1_dat,        -- 1-bit data expansion output
-            SHIFTOUT2 => shift2_dat,        -- 1-bit data expansion output
+            SHIFTOUT1 => shift1_dat,    -- 1-bit data expansion output
+            SHIFTOUT2 => shift2_dat,    -- 1-bit data expansion output
             TQ        => open,          -- 1-bit 3-state control output
             CLK       => sclk,          -- 1-bit clock input
             CLKDIV    => clk,           -- 1-bit divided clock input
@@ -197,32 +193,31 @@ begin
             SRVAL_OQ       => '0',      -- Define Q1 output value upon SR assertion - ’1’ or ’0’
             SRVAL_TQ       => '0',      -- Define Q1 output value upon SR assertion - ’1’ or ’0’
             TRISTATE_WIDTH => 1         -- Specify parallel to serial converter width
-            )                           -- When DATA_RATE_TQ = DDR: 2 or 4
+        )                               -- When DATA_RATE_TQ = DDR: 2 or 4
                                         -- When DATA_RATE_TQ = SDR or BUF: 1 "
-
         port map (
-            OQ        => ser_clk,      -- 1-bit output
-            SHIFTOUT1 => open,          -- 1-bit data expansion output
-            SHIFTOUT2 => open,          -- 1-bit data expansion output
-            TQ        => open,          -- 1-bit 3-state control output
-            CLK       => sclk,          -- 1-bit clock input
-            CLKDIV    => clk,           -- 1-bit divided clock input
-            D1        => '1', -- 1-bit parallel data input
-            D2        => '0', -- 1-bit parallel data input
-            D3        => '1', -- 1-bit parallel data input
-            D4        => '0', -- 1-bit parallel data input
-            D5        => '1', -- 1-bit parallel data input
-            D6        => '0', -- 1-bit parallel data input
-            OCE       => '1',           -- 1-bit clock enable input
-            REV       => '0',           -- Must be tied to logic zero
-            SHIFTIN1  => shift1_clk,        -- 1-bit data expansion input
-            SHIFTIN2  => shift2_clk,        -- 1-bit data expansion input
-            SR        => rst,           -- 1-bit set/reset input
-            T1        => '0',           -- 1-bit parallel 3-state input
-            T2        => '0',           -- 1-bit parallel 3-state input
-            T3        => '0',           -- 1-bit parallel 3-state input
-            T4        => '0',           -- 1-bit parallel 3-state input
-            TCE       => '0'            -- 1-bit 3-state signal clock enable input
+            OQ        => ser_clk,    -- 1-bit output
+            SHIFTOUT1 => open,       -- 1-bit data expansion output
+            SHIFTOUT2 => open,       -- 1-bit data expansion output
+            TQ        => open,       -- 1-bit 3-state control output
+            CLK       => sclk,       -- 1-bit clock input
+            CLKDIV    => clk,        -- 1-bit divided clock input
+            D1        => '1',        -- 1-bit parallel data input
+            D2        => '0',        -- 1-bit parallel data input
+            D3        => '1',        -- 1-bit parallel data input
+            D4        => '0',        -- 1-bit parallel data input
+            D5        => '1',        -- 1-bit parallel data input
+            D6        => '0',        -- 1-bit parallel data input
+            OCE       => '1',        -- 1-bit clock enable input
+            REV       => '0',        -- Must be tied to logic zero
+            SHIFTIN1  => shift1_clk, -- 1-bit data expansion input
+            SHIFTIN2  => shift2_clk, -- 1-bit data expansion input
+            SR        => rst,        -- 1-bit set/reset input
+            T1        => '0',        -- 1-bit parallel 3-state input
+            T2        => '0',        -- 1-bit parallel 3-state input
+            T3        => '0',        -- 1-bit parallel 3-state input
+            T4        => '0',        -- 1-bit parallel 3-state input
+            TCE       => '0'         -- 1-bit 3-state signal clock enable input
         );
 
     slave_serdes_inst_clk : OSERDES
@@ -239,30 +234,29 @@ begin
             TRISTATE_WIDTH => 1        -- Specify parallel to serial converter width
         )                              -- When DATA_RATE_TQ = DDR: 2 or 4
                                        -- When DATA_RATE_TQ = SDR or BUF: 1 "
-
         port map (
-            OQ        => open,          -- 1-bit output
-            SHIFTOUT1 => shift1_clk,        -- 1-bit data expansion output
-            SHIFTOUT2 => shift2_clk,        -- 1-bit data expansion output
-            TQ        => open,          -- 1-bit 3-state control output
-            CLK       => sclk,          -- 1-bit clock input
-            CLKDIV    => clk,           -- 1-bit divided clock input
-            D1        => '0',           -- 1-bit parallel data input
-            D2        => '0',           -- 1-bit parallel data input
-            D3        => '1', -- 1-bit parallel data input
-            D4        => '0', -- 1-bit parallel data input
-            D5        => '1', -- 1-bit parallel data input
-            D6        => '0', -- 1-bit parallel data input
-            OCE       => '1',           -- 1-bit clock enable input
-            REV       => '0',           -- Must be tied to logic zero
-            SHIFTIN1  => '0',           -- 1-bit data expansion input
-            SHIFTIN2  => '0',           -- 1-bit data expansion input
-            SR        => rst,           -- 1-bit set/reset input
-            T1        => '0',           -- 1-bit parallel 3-state input
-            T2        => '0',           -- 1-bit parallel 3-state input
-            T3        => '0',           -- 1-bit parallel 3-state input
-            T4        => '0',           -- 1-bit parallel 3-state input
-            TCE       => '0'            -- 1-bit 3-state signal clock enable input
+            OQ        => open,       -- 1-bit output
+            SHIFTOUT1 => shift1_clk, -- 1-bit data expansion output
+            SHIFTOUT2 => shift2_clk, -- 1-bit data expansion output
+            TQ        => open,       -- 1-bit 3-state control output
+            CLK       => sclk,       -- 1-bit clock input
+            CLKDIV    => clk,        -- 1-bit divided clock input
+            D1        => '0',        -- 1-bit parallel data input
+            D2        => '0',        -- 1-bit parallel data input
+            D3        => '1',        -- 1-bit parallel data input
+            D4        => '0',        -- 1-bit parallel data input
+            D5        => '1',        -- 1-bit parallel data input
+            D6        => '0',        -- 1-bit parallel data input
+            OCE       => '1',        -- 1-bit clock enable input
+            REV       => '0',        -- Must be tied to logic zero
+            SHIFTIN1  => '0',        -- 1-bit data expansion input
+            SHIFTIN2  => '0',        -- 1-bit data expansion input
+            SR        => rst,        -- 1-bit set/reset input
+            T1        => '0',        -- 1-bit parallel 3-state input
+            T2        => '0',        -- 1-bit parallel 3-state input
+            T3        => '0',        -- 1-bit parallel 3-state input
+            T4        => '0',        -- 1-bit parallel 3-state input
+            TCE       => '0'         -- 1-bit 3-state signal clock enable input
         );
 
     -- End of OSERDES_inst instantiation
@@ -358,10 +352,10 @@ begin
         port map (
             O  => CLK_LANE_P, -- Diff_p output
             OB => CLK_LANE_N, -- Diff_n output
-            I  => ser_clk        -- Buffer input
+            I  => ser_clk     -- Buffer input
         );
     -- End of OBUFDS_inst instantiation
 
-    --	debug(31 downto 22) <= enc10b_dat;
+    --  debug(31 downto 22) <= enc10b_dat;
 
 end rtl;

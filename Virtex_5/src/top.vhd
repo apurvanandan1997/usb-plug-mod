@@ -43,7 +43,7 @@ architecture rtl of top is
 
     signal rng        : std_logic_vector (31 downto 0);
     signal enc10b_dat : std_logic_vector(9 downto 0);
-
+    -- PLL internal signals
     signal rst       : std_logic;
     signal locked    : std_logic;
     signal clkfbout  : std_logic;
@@ -51,11 +51,11 @@ architecture rtl of top is
     signal sclk      : std_logic;
     signal clk_bufg  : std_logic;
     signal sclk_bufg : std_logic;
-
+    -- Data Serdes internal signals
     signal ser_data   : std_logic := '0';
     signal shift1_dat : std_logic := '0';
     signal shift2_dat : std_logic := '0';
-
+    -- Clock Serdes internal signals
     signal ser_clk    : std_logic := '0';
     signal shift1_clk : std_logic := '0';
     signal shift2_clk : std_logic := '0';
@@ -86,7 +86,6 @@ begin
             DIVCLK_DIVIDE => 1,                         -- Division factor for all clocks (1 to 52)
             REF_JITTER    => 0.100                      -- Input reference jitter (0.000 to 0.999 UI%)
         )
-
         port map (
             CLKFBOUT => clkfbout, -- General output feedback signal
             CLKOUT0  => clk_bufg, -- One of six general clock output signals

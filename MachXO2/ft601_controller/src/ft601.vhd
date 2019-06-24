@@ -3,11 +3,11 @@
 -- Engineer:       Apurva Nandan
 -- 
 -- Create Date:    00:22:57 08/05/2019 
--- Design Name: 
+-- Design Name:    USB 3.0 Plugin Module FT601 Controller
 -- Module Name:    ft601
 -- Project Name: 
--- Target Devices: 
--- Tool versions: 
+-- Target Devices: MachXO2-LCMXO2-2000HC-6TG100C
+-- Tool versions:  Lattice Diamond 3
 -- Description:    FT601 Controller in FT245 mode
 --
 -- Dependencies: 
@@ -54,26 +54,29 @@ end entity ft601;
 
 
 architecture rtl of ft601 is
+    -- The state for the two FSM made in this design
     constant IDLE    : std_logic_vector(2 downto 0) := "000";
     constant INTMDT1 : std_logic_vector(2 downto 0) := "001";
     constant INTMDT2 : std_logic_vector(2 downto 0) := "010";
     constant INTMDT3 : std_logic_vector(2 downto 0) := "011"; 
     constant ACTIVE_RX  : std_logic_vector(2 downto 0) := "100";
     constant ACTIVE_TX  : std_logic_vector(2 downto 0) := "101";
-
+    -- i_* are internal/intermediate signal
+    -- Signal for buffering and inverting active low IOs
     signal i_state : std_logic_vector(2 downto 0) := IDLE;
     signal ft601_txe : std_logic :='0';
     signal ft601_rd : std_logic :='0';
     signal ft601_oe : std_logic :='0';
     signal ft601_rxf : std_logic :='0';
-
+    -- Various Enable signals
     signal i_byte_en  : std_logic := '0';
     signal i_rd_en    : std_logic := '0';
     signal i_wr_en    : std_logic := '0';
     signal i_dat_rdy  : std_logic := '0';
+    -- Buffer for data input and output
     signal i_dat_i_buf : std_logic_vector(31 downto 0);
     signal i_dat_o_buf : std_logic_vector(31 downto 0);
-
+    -- For handling the data transmission to the HOST
     signal i_tx_state  : std_logic_vector(2 downto 0) := IDLE;
     signal i_valid     : std_logic_vector(2 downto 0) := "000";
     signal i_pre_valid : std_logic_vector(2 downto 0) := "000";
@@ -83,7 +86,10 @@ architecture rtl of ft601 is
 
 begin
 
-    process(clk)
+    ----------------------------------------------------------------------------
+    -- sampl_proc: Buffering the control signals and data output
+    ----------------------------------------------------------------------------
+    sampl_proc: process(clk)
     begin
         if rising_edge(clk) then
             i_dat_o_buf <= ft601_data(7 downto 0) & ft601_data(15 downto 8) & ft601_data(23 downto 16) & ft601_data(31 downto 24);
@@ -95,7 +101,10 @@ begin
         end if;
     end process;
 
-    process(clk)
+    ----------------------------------------------------------------------------
+    -- ft245_proc: Main FT245 Control FSM Process
+    ----------------------------------------------------------------------------
+    ft245_proc: process(clk)
     begin
         if rising_edge(clk) then
             if rst = '1' then
@@ -152,7 +161,10 @@ begin
         end if;
     end process;
 
-    process(clk)
+    ----------------------------------------------------------------------------
+    -- trans_proc: Transmission and Re-transmission of data to FT601 
+    ----------------------------------------------------------------------------
+    trans_proc: process(clk)
     begin
         if rising_edge(clk) then
             if rst = '1' then

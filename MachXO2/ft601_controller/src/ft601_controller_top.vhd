@@ -3,12 +3,12 @@
 -- Engineer:       Apurva Nandan
 -- 
 -- Create Date:    00:22:57 08/05/2019 
--- Design Name: 
+-- Design Name:    USB 3.0 Plugin Module FT601 Controller
 -- Module Name:    ft601_top
 -- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description:    FT601 Controller in FT245 mode
+-- Target Devices: MachXO2-LCMXO2-2000HC-6TG100C
+-- Tool versions:  Lattice Diamond 3
+-- Description:    FT601 Controller in FT245 mode with pseudo-data
 --
 -- Dependencies: 
 --
@@ -25,10 +25,11 @@ use ieee.std_logic_unsigned.all;
 
 entity ft601_top is
     port (
+        -- FT601 Activity Indicating LED
         LED : out std_logic;
-
+        -- To/from the FT601 pads
         FT601_CLK    : in  std_logic;
-        FT601_RST_N  : out  std_logic;
+        FT601_RST_N  : out std_logic;
         FT601_DATA   : out std_logic_vector(31 downto 0);
         FT601_BE     : out std_logic_vector(3 downto 0);
         FT601_RXF_N  : in  std_logic;
@@ -39,16 +40,18 @@ entity ft601_top is
         FT601_OE_N   : out std_logic
 
     );
-    
+
 end entity ft601_top;
 
 architecture rtl of ft601_top is
+    
+    -- Component inclusions begin
     component data_gen is
         port (
-            rst : in  std_logic;
-            clk : in  std_logic;
+            rst      : in  std_logic;
+            clk      : in  std_logic;
             data_req : in  std_logic;
-            data_out : out std_logic_vector (31 downto 0)
+            data_out : out std_logic_vector(31 downto 0)
         );
     end component data_gen;
 
@@ -75,7 +78,9 @@ architecture rtl of ft601_top is
             data_wr_en  : in  std_logic
         );
     end component ft601;
+    -- End component inclusions
 
+    -- Linking signals
     signal rst      : std_logic;
     signal req_data : std_logic;
     signal gen_data : std_logic_vector(31 downto 0);
@@ -85,17 +90,26 @@ begin
     FT601_RST_N <= '1';
     rst <= '0';
 
-    data_gen_comp : data_gen port map (
-        rst => rst,
-        clk => FT601_CLK,
+    ------------------------------------------------------------------------
+    -- data_gen_comp: Data Generating module for feeding to the FTDI
+    --                For testing purposes only. Currnetly just incoporates
+    --                a 32-bit counter.
+    ------------------------------------------------------------------------
+    data_gen_comp : data_gen port map(
+        rst      => rst,
+        clk      => FT601_CLK,
         data_req => req_data,
         data_out => gen_data
     );
-    
-    ft601_comp : ft601 port map (
-        clk => FT601_CLK,
-        rst => rst,
-        led => LED,
+
+    ------------------------------------------------------------------------
+    -- ft601_comp: The FT601Q FTDI controller in FT245 mode
+    -- Version:    3.2
+    ------------------------------------------------------------------------
+    ft601_comp : ft601 port map(
+        clk          => FT601_CLK,
+        rst          => rst,
+        led          => LED,
         ft601_data   => FT601_DATA,
         ft601_be     => FT601_BE,
         ft601_rxf_n  => FT601_RXF_N,
@@ -109,5 +123,5 @@ begin
         fifo_in_emp  => '0',
         data_wr_en   => '1'
     );
-    
+
 end architecture rtl;

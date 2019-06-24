@@ -4,70 +4,36 @@ DEVICE="LCMXO2-2000HC"
 PKG="TQFP100"
 GRADE=6
 SEARCH="/usr/local/diamond/3.10_x64/ispfpga/vhdl/data/"
+BUILD= ./build/
+SRC= ./src/
+CFG= ./cfg/
 
-ALL:	ft601.svf
+ALL:	$(BUILD)ft601.svf
 
-%.edi : %.vhd 
-	synpwrap -prj $*.prj
+$(BUILD)%.edi : $(SRC)%.vhd 
+	mkdir $(BUILD) && cp $(CFG)$*.prj $(BUILD)
+	synpwrap -prj "$(BUILD)$*.prj"
 
-%.ngo : %.edi
+$(BUILD)%.ngo : $(BUILD)%.edi
 	edif2ngd -l $(BOARD) -d $(DEVICE) $< $@
 
-%.ngd : %.ngo
+$(BUILD)%.ngd : $(BUILD)%.ngo
 	ngdbuild -a $(BOARD) -d $(DEVICE) -p $(SEARCH) $< $@
 
-%.ncd : %.ngd %.lpf
-	map -a $(BOARD) -p $(DEVICE) -t $(PKG) -s $(GRADE) $< -o $@ $*.lpf
+$(BUILD)%.ncd : $(BUILD)%.ngd $(SRC)%.lpf
+	cp $(SRC)$*.lpf $(BUILD)
+	map -a $(BOARD) -p $(DEVICE) -t $(PKG) -s $(GRADE) $< -o $@ $(BUILD)$*.lpf
 
-%.o.ncd : %.ncd
-	par -w $< $*.o.ncd $*.prf
+$(BUILD)%.o.ncd : $(BUILD)%.ncd
+	par -w $< $(BUILD)$*.o.ncd $(BUILD)$*.prf
 
-%.jed : %.o.ncd
-	bitgen -w -jedec $< $@
-
-%.bit : %.o.ncd
+$(BUILD)%.bit : $(BUILD)%.o.ncd
 	bitgen -w $< $@
 
-%.rbt : %.o.ncd
-	bitgen -w -b $< $@
-
-%.jbt : %.o.ncd
-	# bitgen -w -J w -a $< -o $@
-
-%.twr : %.ncd
-	trce -v $< $*.prf -o $@
-
-%.bin : %.jed
-	ddtcmd -oft -jed2bin -if $< -of $@
-
-%.hex : %.jed
-	ddtcmd -oft -jed2hex -if $< -of $@
-
-%.svf : %.jed
-	ddtcmd -oft -svfsingle -op "FLASH Erase,Program,Verify" -if $< -of $@
-	mv -f $@ $@.flash
+$(BUILD)%.svf : $(BUILD)%.bit
 	ddtcmd -oft -svfsingle -revd -op "SRAM Fast Program" -if $< -of $@
-	mv -f $@ $@.sram
-	./svf_to_urjtag.pl <$@.flash | sed 's/,/./g' > $@
 
 clean:
-	rm -f *~
-	rm -f *.alt *.areasrr *.asd
-	rm -f *.bgn *.cam *.drc *.edi
-	rm -f *.fse *.hrr *.mrp *.rbt
-	rm -f *.ncd *.pad *.par *.prf
-	rm -f *.prs *.rpt *.sdc *.srd
-	rm -f *.srm *.srr *.srs *.twr
-	rm -f *.log *.htm *.bak 
-	rm -f *.jed *.hex *.bit *.mcs
-	rm -f *_synplify.lpf
-	rm -f *.svf{,.sram,.flash}
-	rm -f run_options.txt
-	rm -rf backup
-	rm -rf dm
-	rm -rf coreip
-	rm -rf physical_plus
-	rm -rf synlog
-	rm -rf synwork
-	rm -rf syntmp
-
+	rm -rf $(BUILD)
+	rm -f stdout.log
+	rm -f synlog.tcl

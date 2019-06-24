@@ -1,7 +1,7 @@
 
 #project files
 add_file -vhdl -lib work "/usr/local/diamond/3.10_x64/cae_library/synthesis/vhdl/machxo2.vhd"
-add_file -vhdl -lib work "./ft601_controller_top.vhd" "./data_gen.vhd" "./ft601.vhd" -top ft601_top
+add_file -vhdl -lib work "../src/ft601_controller_top.vhd" "../src/data_gen.vhd" "../src/ft601.vhd"
 
 #implementation "count"
 impl -add count -type fpga

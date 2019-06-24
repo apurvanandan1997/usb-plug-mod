@@ -29,7 +29,7 @@ entity ft601_top is
         -- To/from the FT601 pads
         FT601_CLK    : in  std_logic;
         FT601_RST_N  : out std_logic;
-        FT601_DATA   : out std_logic_vector(31 downto 0);
+        FT601_DATA   : inout std_logic_vector(31 downto 0);
         FT601_BE     : out std_logic_vector(3 downto 0);
         FT601_RXF_N  : in  std_logic;
         FT601_TXE_N  : in  std_logic;
@@ -60,7 +60,7 @@ architecture rtl of ft601_top is
             led : out std_logic;
 
             -- To FT601 chip
-            ft601_data   : out std_logic_vector(31 downto 0);
+            ft601_data   : inout std_logic_vector(31 downto 0);
             ft601_be     : out std_logic_vector(3 downto 0);
             ft601_rxf_n  : in  std_logic;
             ft601_txe_n  : in  std_logic;
@@ -73,7 +73,11 @@ architecture rtl of ft601_top is
             data_in     : in  std_logic_vector(31 downto 0);
             req_data    : out std_logic;
             fifo_in_emp : in  std_logic;
-            data_wr_en  : in  std_logic
+            data_wr_en  : in  std_logic;
+
+            -- To Internal FIFOs
+            data_out     : out std_logic_vector(31 downto 0);
+            dat_out_rdy  : out std_logic
         );
     end component ft601;
     -- End component inclusions
@@ -119,7 +123,9 @@ begin
         data_in      => gen_data,
         req_data     => req_data,
         fifo_in_emp  => '0',
-        data_wr_en   => '1'
+        data_wr_en   => '1',
+        data_out     => open,
+        dat_out_rdy  => open
     );
 
 end architecture rtl;

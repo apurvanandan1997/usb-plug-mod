@@ -46,7 +46,7 @@ entity ft601 is
 
         -- To Internal FIFOs
         data_out     : out std_logic_vector(31 downto 0);
-        dat_out_rdy : out std_logic
+        dat_out_rdy  : out std_logic
 
     );
 

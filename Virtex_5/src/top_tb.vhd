@@ -17,14 +17,13 @@
 -- Revision:
 -- Revision 0.01 - File Created
 -- Additional Comments:
---
--- Notes: 
--- This testbench has been automatically generated using types std_logic and
--- std_logic_vector for the ports of the unit under test.  Xilinx recommends
--- that these types always be used for the top-level I/O of a design in order
--- to guarantee that the testbench will bind correctly to the post-implementation 
--- simulation model.
---------------------------------------------------------------------------------
+----------------------------------------------------------------------------
+--  This program is free software: you can redistribute it and/or
+--  modify it under the terms of the GNU General Public License
+--  as published by the Free Software Foundation, either version
+--  3 of the License, or (at your option) any later version.
+----------------------------------------------------------------------------
+
 library ieee;
 use ieee.std_logic_1164.all;
 
